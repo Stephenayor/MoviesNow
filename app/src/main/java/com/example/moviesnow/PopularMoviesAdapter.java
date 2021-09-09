@@ -7,7 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.example.moviesnow.Model.Movies;
+import com.example.moviesnow.Model.MovieResult;
+import com.example.moviesnow.Model.PopularMovies;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +17,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdapter.PopularMoviesViewHolder> {
-private Movies movies;
+private MovieResult movieResult;
 private LayoutInflater layoutInflater;
 private Context context;
-private List<Movies> moviesList = new ArrayList<>();
+private List<PopularMovies> moviesList;
+private List<MovieResult> movieResultList = new ArrayList<>();
 
-    public PopularMoviesAdapter(Context context, Movies movies, List<Movies> moviesList) {
-    this.movies = movies;
+    public PopularMoviesAdapter(Context context, MovieResult movies, List<PopularMovies> popularMoviesList) {
+    this.movieResult = movies;
     this.context = context;
-    this.moviesList = moviesList;
+    this.moviesList = popularMoviesList;
     this.layoutInflater = LayoutInflater.from(context);
     }
 
@@ -38,7 +40,7 @@ private List<Movies> moviesList = new ArrayList<>();
     @Override
     public void onBindViewHolder(@NonNull PopularMoviesViewHolder holder, int position) {
         Glide.with(context)
-                .load(moviesList.get(position).getPoster())
+                .load(movieResultList.get(position).getPosterPath())
                 .into(holder.imageView);
     }
 
