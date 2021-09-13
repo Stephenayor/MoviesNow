@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 public class MovieResult implements Parcelable
 {
 
+
     @SerializedName("adult")
     @Expose
     private Boolean adult;
@@ -218,6 +219,26 @@ public class MovieResult implements Parcelable
 
     public int describeContents() {
         return  0;
+    }
+
+    @Override
+    public String toString() {
+        return "MovieResult{" +
+                "adult=" + adult +
+                ", backdropPath='" + backdropPath + '\'' +
+                ", genreIds=" + genreIds +
+                ", id=" + id +
+                ", originalLanguage='" + originalLanguage + '\'' +
+                ", originalTitle='" + originalTitle + '\'' +
+                ", overview='" + overview + '\'' +
+                ", popularity=" + popularity +
+                ", posterPath='" + posterPath + '\'' +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", title='" + title + '\'' +
+                ", video=" + video +
+                ", voteAverage=" + voteAverage +
+                ", voteCount=" + voteCount +
+                '}';
     }
 
 }

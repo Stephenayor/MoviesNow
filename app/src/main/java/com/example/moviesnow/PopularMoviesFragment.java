@@ -1,6 +1,7 @@
 package com.example.moviesnow;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -24,53 +25,50 @@ import java.util.List;
 public class PopularMoviesFragment extends Fragment {
 private ProgressDialog progressDialog;
 private RecyclerView recyclerview;
-private MovieResult movieResult;
-private List<PopularMovies> popularMoviesList = new ArrayList<>();
-
+private PopularMoviesAdapter adapter;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.popular_movies, container, false);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("IMAGES ARE LOADING. . .");
         progressDialog.show();
-        final View view = inflater.inflate(R.layout.popular_movies, container, false);
         recyclerview = view.findViewById(R.id.popularMovies_recyclerView);
 
           MoviesApi moviesApiService = MoviesNowRetrofitClientInstance.getRetrofitInstance().create(MoviesApi.class);
-          Call <List<PopularMovies>> call = moviesApiService.getAllPopularMovies();
+          Call <PopularMovies> call = moviesApiService.getAllPopularMovies();
             Log.d("API CALL", "Show movie List");
 
-        call.enqueue(new Callback<List<PopularMovies>>() {
+        call.enqueue(new Callback<PopularMovies>() {
             @Override
-            public void onResponse(Call<List<PopularMovies>> call, Response<List<PopularMovies>> response) {
+            public void onResponse(Call<PopularMovies> call, Response<PopularMovies> response) {
                 progressDialog.dismiss();
          //      Toast.makeText(getContext(), "yo movie "+ response.body().getOriginalTitle(), Toast.LENGTH_LONG).show();
-                generatePopularMoviesList(response.body());
-
+                generatePopularMoviesList(response.body().getMovieResultList());
+                //adapter.notifyDataSetChanged();
             }
-
             @Override
-            public void onFailure(Call<List<PopularMovies>> call, Throwable t) {
+            public void onFailure(Call<PopularMovies> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(getActivity(), "Something Went Wrong" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
 
-            private void generatePopularMoviesList(List<PopularMovies> MoviesList) {
-                recyclerview.setHasFixedSize(true);
-                recyclerview.setLayoutManager(new GridLayoutManager(view.getContext(),3));
-                recyclerview.setAdapter(new PopularMoviesAdapter(view.getContext(), movieResult, popularMoviesList));
-            }
         });
         return view;
+    }
 
+    private void generatePopularMoviesList(List<MovieResult> movies) {
+        adapter = new PopularMoviesAdapter(getContext(), movies);
+        recyclerview.setHasFixedSize(true);
+        recyclerview.setLayoutManager(new GridLayoutManager(getContext(),3));
+        recyclerview.setAdapter(adapter);
     }
 
 }

@@ -1,32 +1,29 @@
 package com.example.moviesnow;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.moviesnow.Model.MovieResult;
-import com.example.moviesnow.Model.PopularMovies;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdapter.PopularMoviesViewHolder> {
-private MovieResult movieResult;
+private List<MovieResult> movies;
 private LayoutInflater layoutInflater;
 private Context context;
-private List<PopularMovies> moviesList;
-private List<MovieResult> movieResultList = new ArrayList<>();
 
-    public PopularMoviesAdapter(Context context, MovieResult movies, List<PopularMovies> popularMoviesList) {
-    this.movieResult = movies;
+
+    public PopularMoviesAdapter(Context context, List<MovieResult> popularMovies) {
     this.context = context;
-    this.moviesList = popularMoviesList;
+    this.movies = popularMovies;
     this.layoutInflater = LayoutInflater.from(context);
     }
 
@@ -39,23 +36,30 @@ private List<MovieResult> movieResultList = new ArrayList<>();
 
     @Override
     public void onBindViewHolder(@NonNull PopularMoviesViewHolder holder, int position) {
-        Glide.with(context)
-                .load(movieResultList.get(position).getPosterPath())
-                .into(holder.imageView);
+        if (movies.get(position) != null) {
+//            Glide.with(context)
+//                    .load(movies.get(position).getPosterPath())
+//                    .into(holder.imageView);
+                    Log.d("TAG", "movie object" + movies.get(position).getOriginalTitle());
+            holder.textView.setText("movies.get(position).getOriginalTitle()");
+        }
     }
 
     @Override
     public int getItemCount() {
-        return moviesList.size();
+        if (movies==null){
+            return 0;
+        }
+        return movies.size();
     }
 
     public class PopularMoviesViewHolder extends RecyclerView.ViewHolder{
-
         public ImageView imageView;
+        public TextView textView;
         public PopularMoviesViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.popularMovies_image_view);
-
+            textView = itemView.findViewById(R.id.movies_textView);
         }
 
 
