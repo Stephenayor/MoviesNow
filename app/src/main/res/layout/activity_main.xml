@@ -11,7 +11,6 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
@@ -24,16 +23,21 @@
         android:text="@string/popular"
         android:textSize="30sp"
         android:textStyle="bold"/>
-
     </androidx.appcompat.widget.Toolbar>
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp"
-        android:id="@+id/movies_fragment"
+        android:id="@+id/fragment_container"
         android:name="com.example.moviesnow.PopularMoviesFragment"
         />
+
+    <FrameLayout
+        android:id="@+id/placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"/>
 
 
 </RelativeLayout>

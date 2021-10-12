@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PopularMoviesFragment extends Fragment {
+public class PopularMoviesFragment extends Fragment implements PopularMoviesAdapter.ItemClickListener {
 private ProgressDialog progressDialog;
 private RecyclerView recyclerview;
 private PopularMoviesAdapter adapter;
@@ -50,9 +51,8 @@ private PopularMoviesAdapter adapter;
             @Override
             public void onResponse(Call<PopularMovies> call, Response<PopularMovies> response) {
                 progressDialog.dismiss();
-         //      Toast.makeText(getContext(), "yo movie "+ response.body().getOriginalTitle(), Toast.LENGTH_LONG).show();
                 generatePopularMoviesList(response.body().getMovieResultList());
-                //adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
             @Override
             public void onFailure(Call<PopularMovies> call, Throwable t) {
@@ -65,10 +65,21 @@ private PopularMoviesAdapter adapter;
     }
 
     private void generatePopularMoviesList(List<MovieResult> movies) {
-        adapter = new PopularMoviesAdapter(getContext(), movies);
+        adapter = new PopularMoviesAdapter(getContext(), movies, this);
         recyclerview.setHasFixedSize(true);
         recyclerview.setLayoutManager(new GridLayoutManager(getContext(),3));
         recyclerview.setAdapter(adapter);
     }
 
+
+    @Override
+    public void onMovieItemClick() {
+        Toast.makeText(getContext(), "Show Fragment", Toast.LENGTH_SHORT).show();
+        Fragment newFragment = new MovieDetailsFragment();
+        getActivity().getSupportFragmentManager().beginTransaction().remove(new PopularMoviesFragment())
+                .replace(R.id.fragment_container, newFragment)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
+    }
 }

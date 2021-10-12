@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.moviesnow.Model.MovieResult;
 import java.util.List;
 import androidx.annotation.NonNull;
@@ -19,29 +18,36 @@ public class PopularMoviesAdapter extends RecyclerView.Adapter<PopularMoviesAdap
 private List<MovieResult> movies;
 private LayoutInflater layoutInflater;
 private Context context;
+private ItemClickListener movieClickListener;
 
 
-    public PopularMoviesAdapter(Context context, List<MovieResult> popularMovies) {
+    public PopularMoviesAdapter(Context context, List<MovieResult> popularMovies, ItemClickListener clickListener) {
     this.context = context;
     this.movies = popularMovies;
+    this.movieClickListener = clickListener;
     this.layoutInflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
     public PopularMoviesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.popular_movies, parent,false);
+        View itemView = layoutInflater.from(parent.getContext()).inflate(R.layout.popularmovies_imagelist_item, parent,false);
         return new PopularMoviesViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PopularMoviesViewHolder holder, int position) {
         if (movies.get(position) != null) {
-//            Glide.with(context)
-//                    .load(movies.get(position).getPosterPath())
-//                    .into(holder.imageView);
-                    Log.d("TAG", "movie object" + movies.get(position).getOriginalTitle());
-            holder.textView.setText("movies.get(position).getOriginalTitle()");
+            Glide.with(context)
+                    .load("https://image.tmdb.org/t/p/w500/" +
+                            movies.get(position).getPosterPath())
+                    .into(holder.imageView);
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            movieClickListener.onMovieItemClick();
+                        }
+                    });
         }
     }
 
@@ -53,15 +59,17 @@ private Context context;
         return movies.size();
     }
 
-    public class PopularMoviesViewHolder extends RecyclerView.ViewHolder{
-        public ImageView imageView;
-        public TextView textView;
+    public class PopularMoviesViewHolder extends RecyclerView.ViewHolder {
+        private ImageView imageView;
+        private TextView textView;
         public PopularMoviesViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.popularMovies_image_view);
-            textView = itemView.findViewById(R.id.movies_textView);
         }
 
-
     }
+
+        public interface ItemClickListener{
+        void onMovieItemClick();
+        }
 }
