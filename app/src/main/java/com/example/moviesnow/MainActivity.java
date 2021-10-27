@@ -2,14 +2,14 @@ package com.example.moviesnow;
 
 
 import android.os.Bundle;
-import android.widget.Toast;
+import android.os.Parcelable;
+
+import com.example.moviesnow.Model.PopularMovies;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity{
-
+private PopularMovies popularMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,11 +18,10 @@ public class MainActivity extends AppCompatActivity{
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.fragment_container, PopularMoviesFragment.class, null)
+                    .add(R.id.first_fragment, PopularMoviesFragment.class, null)
                     .commit();
 
         }
     }
-
 
 }

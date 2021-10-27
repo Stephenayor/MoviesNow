@@ -25,12 +25,11 @@
         android:textStyle="bold"/>
     </androidx.appcompat.widget.Toolbar>
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp"
-        android:id="@+id/fragment_container"
-        android:name="com.example.moviesnow.PopularMoviesFragment"
+        android:id="@+id/first_fragment"
         />
 
     <FrameLayout

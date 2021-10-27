@@ -1,15 +1,17 @@
 package com.example.moviesnow;
 
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,19 +21,33 @@ import com.example.moviesnow.Model.MovieResult;
 import com.example.moviesnow.Model.PopularMovies;
 import com.example.moviesnow.Network.MoviesApi;
 import com.example.moviesnow.Network.MoviesNowRetrofitClientInstance;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
 public class PopularMoviesFragment extends Fragment implements PopularMoviesAdapter.ItemClickListener {
-private ProgressDialog progressDialog;
-private RecyclerView recyclerview;
-private PopularMoviesAdapter adapter;
+    private static final String MOVIES = "movieResult";
+    private ProgressDialog progressDialog;
+    private RecyclerView recyclerview;
+    private PopularMoviesAdapter adapter;
+    private List<MovieResult> movieResult = new ArrayList<MovieResult>();
+
+
+
+
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(final Bundle outState) { 
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(MOVIES, (ArrayList<? extends Parcelable>) movieResult);
     }
 
     @Override
@@ -46,6 +62,7 @@ private PopularMoviesAdapter adapter;
           MoviesApi moviesApiService = MoviesNowRetrofitClientInstance.getRetrofitInstance().create(MoviesApi.class);
           Call <PopularMovies> call = moviesApiService.getAllPopularMovies();
             Log.d("API CALL", "Show movie List");
+
 
         call.enqueue(new Callback<PopularMovies>() {
             @Override
@@ -64,7 +81,7 @@ private PopularMoviesAdapter adapter;
         return view;
     }
 
-    private void generatePopularMoviesList(List<MovieResult> movies) {
+        private void generatePopularMoviesList(List<MovieResult> movies) {
         adapter = new PopularMoviesAdapter(getContext(), movies, this);
         recyclerview.setHasFixedSize(true);
         recyclerview.setLayoutManager(new GridLayoutManager(getContext(),3));
@@ -73,11 +90,13 @@ private PopularMoviesAdapter adapter;
 
 
     @Override
-    public void onMovieItemClick() {
-        Toast.makeText(getContext(), "Show Fragment", Toast.LENGTH_SHORT).show();
-        Fragment newFragment = new MovieDetailsFragment();
+    public void onMovieItemClick(MovieResult movie) {
+        Fragment movieDetailsFragment = new MovieDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("movies", movie);
+        movieDetailsFragment.setArguments(bundle);
         getActivity().getSupportFragmentManager().beginTransaction().remove(new PopularMoviesFragment())
-                .replace(R.id.fragment_container, newFragment)
+                .replace(R.id.first_fragment, movieDetailsFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();

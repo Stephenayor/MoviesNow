@@ -68,7 +68,7 @@ public class MovieResult implements Parcelable
     }
             ;
 
-    protected MovieResult(android.os.Parcel in) {
+    public MovieResult(android.os.Parcel in) {
         this.adult = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.backdropPath = ((String) in.readValue((String.class.getClassLoader())));
         in.readList(this.genreIds, (java.lang.Integer.class.getClassLoader()));

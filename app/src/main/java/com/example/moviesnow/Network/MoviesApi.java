@@ -15,7 +15,4 @@ public interface MoviesApi {
     @GET("3/movie/popular?api_key="+popularMoviesKey)
     Call <PopularMovies> getAllPopularMovies();
 
-//    @GET("3/movie/550?api_key="+key)
-//    Call <List<Movie>> getMovie();
-
 }

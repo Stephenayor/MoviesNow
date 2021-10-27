@@ -1,6 +1,7 @@
 package com.example.moviesnow;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,11 +46,12 @@ private ItemClickListener movieClickListener;
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            movieClickListener.onMovieItemClick();
+                            movieClickListener.onMovieItemClick(movies.get(position));
                         }
                     });
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -68,8 +70,7 @@ private ItemClickListener movieClickListener;
         }
 
     }
-
         public interface ItemClickListener{
-        void onMovieItemClick();
+        void onMovieItemClick(MovieResult movieResult);
         }
 }
