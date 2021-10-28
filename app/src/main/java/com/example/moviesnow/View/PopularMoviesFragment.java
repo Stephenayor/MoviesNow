@@ -1,29 +1,24 @@
-package com.example.moviesnow;
+package com.example.moviesnow.View;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
 import com.example.moviesnow.Model.MovieResult;
 import com.example.moviesnow.Model.PopularMovies;
-import com.example.moviesnow.Network.MoviesApi;
-import com.example.moviesnow.Network.MoviesNowRetrofitClientInstance;
+import com.example.moviesnow.PopularMoviesAdapter;
+import com.example.moviesnow.R;
+import com.example.moviesnow.Viewmodel.PopularMoviesViewmodel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -33,9 +28,6 @@ public class PopularMoviesFragment extends Fragment implements PopularMoviesAdap
     private RecyclerView recyclerview;
     private PopularMoviesAdapter adapter;
     private List<MovieResult> movieResult = new ArrayList<MovieResult>();
-
-
-
 
 
 
@@ -59,35 +51,24 @@ public class PopularMoviesFragment extends Fragment implements PopularMoviesAdap
         progressDialog.show();
         recyclerview = view.findViewById(R.id.popularMovies_recyclerView);
 
-          MoviesApi moviesApiService = MoviesNowRetrofitClientInstance.getRetrofitInstance().create(MoviesApi.class);
-          Call <PopularMovies> call = moviesApiService.getAllPopularMovies();
-            Log.d("API CALL", "Show movie List");
 
-
-        call.enqueue(new Callback<PopularMovies>() {
+        PopularMoviesViewmodel popularMoviesViewmodel = new PopularMoviesViewmodel();
+        popularMoviesViewmodel.getPopularMovies().observe(getViewLifecycleOwner(), new Observer<PopularMovies>() {
             @Override
-            public void onResponse(Call<PopularMovies> call, Response<PopularMovies> response) {
+            public void onChanged(PopularMovies popularMovies) {
                 progressDialog.dismiss();
-                generatePopularMoviesList(response.body().getMovieResultList());
-                adapter.notifyDataSetChanged();
+                generatePopularMoviesList(popularMovies.getMovieResultList());
             }
-            @Override
-            public void onFailure(Call<PopularMovies> call, Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(getActivity(), "Something Went Wrong" + t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
         });
+
         return view;
     }
-
         private void generatePopularMoviesList(List<MovieResult> movies) {
         adapter = new PopularMoviesAdapter(getContext(), movies, this);
         recyclerview.setHasFixedSize(true);
         recyclerview.setLayoutManager(new GridLayoutManager(getContext(),3));
         recyclerview.setAdapter(adapter);
     }
-
 
     @Override
     public void onMovieItemClick(MovieResult movie) {

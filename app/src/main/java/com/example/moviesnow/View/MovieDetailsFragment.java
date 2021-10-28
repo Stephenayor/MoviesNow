@@ -1,4 +1,4 @@
-package com.example.moviesnow;
+package com.example.moviesnow.View;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.moviesnow.Model.MovieResult;
+import com.example.moviesnow.R;
 
 
 public class MovieDetailsFragment extends Fragment {
@@ -26,13 +27,11 @@ public class MovieDetailsFragment extends Fragment {
 
 
     public MovieDetailsFragment() {
-
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @SuppressLint("SetTextI18n")
