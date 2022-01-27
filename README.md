@@ -1,7 +1,7 @@
 # MoviesNow
 
 
-MoviesNow is a mobile application that shows the list of popular movies and the movie details. It gets the data from TheMovieDatabase Api using retrofit so the list of movies stays updated and it is in sync with the latest movies available on TheMovieDatabase
+MoviesNow is a mobile application that shows the list of popular movies . It contains a Movie Details Screen that shows the Movie Synopsis, Release Date and other details about the movie. It gets the data from TheMovieDatabase Api using **Retrofit Library** so the list of Movies stays updated and it is in sync with the latest movies available on TheMovieDatabase
 
 ## Features
 #### Built With 🛠
